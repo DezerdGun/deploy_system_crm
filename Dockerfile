@@ -9,6 +9,7 @@ RUN yarn build
 
 ###### Run #####
 FROM nginx:alpine
+EXPOSE 80
 LABEL author="Harry Ho"
 WORKDIR /var/cache/nginx
 COPY --from=node /app/dist /usr/share/nginx/html
