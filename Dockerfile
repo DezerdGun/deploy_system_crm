@@ -1,17 +1,17 @@
 ###### Build #####
-FROM node:12-slim AS node
+FROM node:24-bookworm-slim AS node
 LABEL author="Harry Ho"
-WORKDIR /
+WORKDIR /app
 COPY . .
-RUN npm install
-RUN npm run build
+RUN corepack enable && corepack prepare yarn@1.22.22 --activate && yarn install --frozen-lockfile --non-interactive
+RUN yarn build
 
 
 ###### Run #####
 FROM nginx:alpine
 LABEL author="Harry Ho"
 WORKDIR /var/cache/nginx
-COPY --from=node /build /usr/share/nginx/html
+COPY --from=node /app/dist /usr/share/nginx/html
 COPY ./config/nginx.conf /etc/nginx/conf.d/default.conf
 
 
